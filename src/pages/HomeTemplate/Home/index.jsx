@@ -56,8 +56,18 @@ import { initCarousels } from "flowbite"; // Hoặc gọi window.initCarousels()
           <ListMovie />
         </section>
         <section>
-          <hr/>
+          <hr />
           <h1 className="">cac su kien dang dien ra</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <img src="/h1.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h2.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h3.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h4.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h5.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h6.jfif" className="w-full h-auto rounded-lg shadow" />
+            <img src="/h7.jfif" className="w-full h-auto rounded-lg shadow" />
+          </div>
+          {/* Render các sự kiện ở đây */}
         </section>
       </div>
     );

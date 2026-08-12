@@ -9,9 +9,9 @@ const initialState = {
 
 export const fetchShowTimes = createAsyncThunk(
   "fetchShowTimes",
-  async (id, { rejectWithValue }) => {
+  async (idRap, { rejectWithValue }) => {
     try {
-      const result = await api.get(`QuanLyRap/LayThongTinLichChieuHeThongRap?maNhom=GP03`);
+      const result = await api.get(`QuanLyRap/LayThongTinLichChieuHeThongRap?maHeThongRap=${idRap}&maNhom=GP03`);
       //const resultLichChieu
       return result.data.content;
     } catch (error) {

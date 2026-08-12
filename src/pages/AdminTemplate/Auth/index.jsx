@@ -52,47 +52,47 @@ export default function Auth() {
   const disabled = !user.taiKhoan || !user.matKhau;
 
   return (
-    
-    <form onSubmit={handleLogin} className="max-w-sm mx-auto">
-      <div className="mb-5">
-        <label className="block mb-2.5 text-sm font-medium text-heading">
-          Tài khoản
-        </label>
-        <input
-          name="taiKhoan"
-          onChange={handleOnchange}
-          onBlur={handleValidation}
-          type="text"
-          className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-        />
-        {validation.taiKhoan && renderAlert(validation.taiKhoan)}
-      </div>
-      <div className="mb-5">
-        <label className="block mb-2.5 text-sm font-medium text-heading">
-          Mật khẩu
-        </label>
-        <input
-          name="matKhau"
-          onChange={handleOnchange}
-          onBlur={handleValidation}
-          type="password"
-          className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-        />
-        {validation.matKhau && renderAlert(validation.matKhau)}
-      </div>
-      <button
-        disabled={disabled}
-        type="submit"
-        className="disabled:bg-gray-300 text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
-      >
-        Đăng Nhập
-      </button>
-      <button
-        type="button"
-        className="ml-2 disabled:bg-gray-300 text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
-      >
-        Đăng Ký
-      </button>
-    </form>
+
+      <form onSubmit={handleLogin} className="max-w-sm mx-auto">
+        <div className="mb-5">
+          <label className="block mb-2.5 text-sm font-medium text-heading">
+            Tài khoản
+          </label>
+          <input
+            name="taiKhoan"
+            onChange={handleOnchange}
+            onBlur={handleValidation}
+            type="text"
+            className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+          />
+          {validation.taiKhoan && renderAlert(validation.taiKhoan)}
+        </div>
+        <div className="mb-5">
+          <label className="block mb-2.5 text-sm font-medium text-heading">
+            Mật khẩu
+          </label>
+          <input
+            name="matKhau"
+            onChange={handleOnchange}
+            onBlur={handleValidation}
+            type="password"
+            className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+          />
+          {validation.matKhau && renderAlert(validation.matKhau)}
+        </div>
+        <button
+          disabled={disabled}
+          type="submit"
+          className="disabled:bg-gray-300 text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
+        >
+          Đăng Nhập
+        </button>
+        <button
+          type="button"
+          className="ml-2 disabled:bg-gray-300 text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
+        >
+          Đăng Ký
+        </button>
+      </form>
   );
 }

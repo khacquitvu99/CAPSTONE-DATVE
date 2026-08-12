@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchDetailCinema } from "./slice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -39,9 +39,11 @@ export default function DetailCinema() {
                         <button className="px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white rounded font-medium transition-colors">
                             Mua Vé
                         </button>
-                        <button className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
-                            Lịch Chiếu
-                        </button>
+                        <Link to={`/Show-Times/${item.maCumRap}`}>
+                            <button className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition-colors">
+                                Lịch Chiếu
+                            </button>
+                        </Link>
                     </div>
                 </div>
             );

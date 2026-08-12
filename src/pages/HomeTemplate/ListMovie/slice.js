@@ -7,16 +7,22 @@ const initialState = {
   error: null,
 };
 
+// Cập nhật thunk nhận tham số tenPhim (mặc định là chuỗi rỗng)
 export const fetchListMovie = createAsyncThunk(
   "fetchListMovie",
-  async (__, { rejectWithValue }) => {
+  async (tenPhim = "", { rejectWithValue }) => {
     try {
-      const result = await api.get("QuanLyPhim/LayDanhSachPhim?maNhom=GP03");
+      // Nếu có truyền tenPhim thì nối thêm query param tenPhim vào URL
+      const url = tenPhim.trim()
+        ? `QuanLyPhim/LayDanhSachPhim?maNhom=GP03&tenPhim=${encodeURIComponent(tenPhim.trim())}`
+        : "QuanLyPhim/LayDanhSachPhim?maNhom=GP03";
+
+      const result = await api.get(url);
       return result.data.content;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data || error.message);
     }
-  },
+  }
 );
 
 const listMovieSlice = createSlice({
@@ -26,7 +32,6 @@ const listMovieSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchListMovie.pending, (state) => {
       state.loading = true;
-      state.data = null;
       state.error = null;
     });
 
