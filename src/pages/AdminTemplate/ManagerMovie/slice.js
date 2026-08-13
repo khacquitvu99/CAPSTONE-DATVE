@@ -12,7 +12,6 @@ export const fetchListMovie = createAsyncThunk(
   "listMovie/fetchListMovie",
   async (tenPhim = "", { rejectWithValue }) => {
     try {
-      // Nếu có truyền tenPhim thì ghép thêm query param tenPhim vào URL
       const url = tenPhim.trim()
         ? `QuanLyPhim/LayDanhSachPhim?maNhom=GP03&tenPhim=${encodeURIComponent(tenPhim.trim())}`
         : "QuanLyPhim/LayDanhSachPhim?maNhom=GP03";
@@ -25,13 +24,12 @@ export const fetchListMovie = createAsyncThunk(
   }
 );
 
-// 2. Thunk thêm phim mới
+// 2. Thunk thêm phim mới (Nhận formData trực tiếp từ Component)
 export const addMovie = createAsyncThunk(
   "listMovie/addMovie",
-  async (movieData, { dispatch, rejectWithValue }) => {
+  async (formData, { dispatch, rejectWithValue }) => {
     try {
-      const payload = { ...movieData, maNhom: "GP03" };
-      const result = await api.post("QuanLyPhim/ThemPhimUploadHinh", payload);
+      const result = await api.post("QuanLyPhim/ThemPhimUploadHinh", formData);
 
       dispatch(fetchListMovie());
       return result.data.content;
@@ -41,13 +39,12 @@ export const addMovie = createAsyncThunk(
   }
 );
 
-// 3. Thunk cập nhật thông tin phim
+// 3. Thunk cập nhật thông tin phim (Nhận formData trực tiếp từ Component)
 export const updateMovie = createAsyncThunk(
   "listMovie/updateMovie",
-  async (movieData, { dispatch, rejectWithValue }) => {
+  async (formData, { dispatch, rejectWithValue }) => {
     try {
-      const payload = { ...movieData, maNhom: "GP03" };
-      const result = await api.post("QuanLyPhim/CapNhatPhimUpload", payload);
+      const result = await api.post("QuanLyPhim/CapNhatPhimUpload", formData);
 
       dispatch(fetchListMovie());
       return result.data.content;

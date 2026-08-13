@@ -7,12 +7,16 @@ const initialState = {
   error: null,
 };
 
-// 1. Thunk lấy danh sách người dùng
+// 1. Thunk lấy / tìm kiếm danh sách người dùng
 export const fetchListUsers = createAsyncThunk(
   "listUsers/fetchListUsers",
-  async (__, { rejectWithValue }) => {
+  async (tuKhoa = "", { rejectWithValue }) => {
     try {
-      const result = await api.get("QuanLyNguoiDung/LayThongTinNguoiDung");
+      const url = tuKhoa.trim()
+        ? `QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=${encodeURIComponent(tuKhoa.trim())}`
+        : "QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03";
+
+      const result = await api.get(url);
       return result.data.content;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -25,8 +29,8 @@ export const addUser = createAsyncThunk(
   "listUsers/addUser",
   async (userData, { dispatch, rejectWithValue }) => {
     try {
-      const result = await api.post("QuanLyNguoiDung/ThemNguoiDung", userData);
-      // Gọi lại danh sách người dùng sau khi thêm thành công
+      const payload = { ...userData, maNhom: "GP03" };
+      const result = await api.post("QuanLyNguoiDung/ThemNguoiDung", payload);
       dispatch(fetchListUsers());
       return result.data.content;
     } catch (error) {
@@ -35,16 +39,25 @@ export const addUser = createAsyncThunk(
   }
 );
 
-// 3. Thunk cập nhật thông tin người dùng
+// 3. Thunk cập nhật thông tin người dùng (ĐÃ SỬA LỖI ĐOẠN NÀY)
 export const updateUser = createAsyncThunk(
   "listUsers/updateUser",
   async (userData, { dispatch, rejectWithValue }) => {
     try {
-      // Đảm bảo dữ liệu gửi lên có mã nhóm GP03
       const payload = { ...userData, maNhom: "GP03" };
-      const result = await api.post("QuanLyNguoiDung/CapNhatThongTinNguoiDung", payload);
-      
-      // Gọi lại danh sách mới sau khi thêm thành công
+
+      // Lấy accessToken từ LocalStorage nếu muốn log ra kiểm tra
+      const userLogin = localStorage.getItem('USER_LOGIN') 
+        ? JSON.parse(localStorage.getItem('USER_LOGIN')) 
+        : null;
+      console.log("Token check:", userLogin?.accessToken);
+
+      // Gọi API (Lưu ý: API Cybersoft thường dùng POST hoặc PUT cho cập nhật)
+      const result = await api.post(
+        "QuanLyNguoiDung/CapNhatThongTinNguoiDung",
+        payload
+      );
+
       dispatch(fetchListUsers());
       return result.data.content;
     } catch (error) {
@@ -52,14 +65,16 @@ export const updateUser = createAsyncThunk(
     }
   }
 );
+
 // 4. Thunk xóa người dùng
 export const deleteUser = createAsyncThunk(
   "listUsers/deleteUser",
   async (taiKhoan, { dispatch, rejectWithValue }) => {
     try {
-      const result = await api.delete(`QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`);
-      
-      // Cập nhật lại danh sách sau khi xóa thành công
+      const result = await api.delete(
+        `QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`
+      );
+
       dispatch(fetchListUsers());
       return result.data.content;
     } catch (error) {
@@ -74,7 +89,7 @@ const ManagerAccSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch List User
+      // Fetch / Search List User
       .addCase(fetchListUsers.pending, (state) => {
         state.loading = true;
         state.error = null;

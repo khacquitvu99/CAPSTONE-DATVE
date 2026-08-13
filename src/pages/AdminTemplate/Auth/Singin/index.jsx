@@ -7,7 +7,7 @@ export default function FormSingin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { loading, error } = useSelector((state) => state.AuthSliceReducer || state.AuthSlice);
+  const { loading, error } = useSelector((state) => state.AuthSliceReducer || state.AuthSlice || {});
 
   const [user, setUser] = useState({
     taiKhoan: "",
@@ -101,7 +101,7 @@ export default function FormSingin() {
       .unwrap()
       .then(() => {
         alert("Đăng ký tài khoản thành công!");
-        navigate("/login"); // Chuyển hướng sang trang đăng nhập
+        navigate("/login");
       })
       .catch((err) => {
         console.error("Lỗi đăng ký:", err);
@@ -110,10 +110,13 @@ export default function FormSingin() {
 
   const renderAlert = (content) => (
     <div
-      className="p-2 mt-1 text-sm text-red-600 rounded-md bg-red-50 border border-red-200"
+      className="flex items-center gap-2 p-2.5 mt-1.5 text-xs font-medium text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl"
       role="alert"
     >
-      {content}
+      <svg className="w-4 h-4 shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{content}</span>
     </div>
   );
 
@@ -127,110 +130,154 @@ export default function FormSingin() {
     Object.values(validation).every((val) => val === "");
 
   return (
-    <div className="p-5 max-w-md mx-auto bg-white rounded-lg shadow mt-8">
-      <h1 className="text-2xl font-bold text-center mb-5">Đăng Ký Tài Khoản</h1>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 py-12 relative overflow-hidden">
 
-      {error &&
-        renderAlert(
-          typeof error === "string"
-            ? error
-            : error?.content || "Đăng ký thất bại, vui lòng thử lại!"
-        )}
+      {/* Hiệu ứng Background Glow chìm */}
+      <div className="absolute -top-32 -right-32 w-80 h-80 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
 
-      <form onSubmit={handleRegister} className="space-y-4">
-        {/* Tài khoản */}
-        <div>
-          <label className="block mb-1 text-sm font-medium">Tài khoản</label>
-          <input
-            name="taiKhoan"
-            value={user.taiKhoan}
-            onChange={handleOnChange}
-            onBlur={handleValidation}
-            type="text"
-            placeholder="Nhập tài khoản"
-            className="bg-neutral-secondary-medium border border-default-medium text-sm rounded-base block w-full px-3 py-2"
-          />
-          {validation.taiKhoan && renderAlert(validation.taiKhoan)}
+      {/* Card Kính Đăng Ký */}
+      <div className="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl shadow-indigo-950/40 backdrop-blur-xl relative z-10 space-y-6">
+
+        {/* Header Form */}
+        <div className="text-center space-y-2">
+          <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 mb-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            Tạo Tài Khoản Mới
+          </h1>
+          <p className="text-xs text-slate-400 font-medium">
+            Điền đầy đủ thông tin bên dưới để bắt đầu
+          </p>
         </div>
 
-        {/* Mật khẩu */}
-        <div>
-          <label className="block mb-1 text-sm font-medium">Mật khẩu</label>
-          <input
-            name="matKhau"
-            value={user.matKhau}
-            onChange={handleOnChange}
-            onBlur={handleValidation}
-            type="password"
-            placeholder="Nhập mật khẩu"
-            className="bg-neutral-secondary-medium border border-default-medium text-sm rounded-base block w-full px-3 py-2"
-          />
-          {validation.matKhau && renderAlert(validation.matKhau)}
-        </div>
+        {error &&
+          renderAlert(
+            typeof error === "string"
+              ? error
+              : error?.content || "Đăng ký thất bại, vui lòng thử lại!"
+          )}
 
-        {/* Họ tên */}
-        <div>
-          <label className="block mb-1 text-sm font-medium">Họ tên</label>
-          <input
-            name="hoTen"
-            value={user.hoTen}
-            onChange={handleOnChange}
-            onBlur={handleValidation}
-            type="text"
-            placeholder="Nhập họ và tên"
-            className="bg-neutral-secondary-medium border border-default-medium text-sm rounded-base block w-full px-3 py-2"
-          />
-          {validation.hoTen && renderAlert(validation.hoTen)}
-        </div>
+        <form onSubmit={handleRegister} className="space-y-4">
+          {/* Tài khoản */}
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Tài khoản
+            </label>
+            <input
+              name="taiKhoan"
+              value={user.taiKhoan}
+              onChange={handleOnChange}
+              onBlur={handleValidation}
+              type="text"
+              placeholder="Nhập tài khoản"
+              className="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 px-3.5 py-2.5 transition-all shadow-inner"
+            />
+            {validation.taiKhoan && renderAlert(validation.taiKhoan)}
+          </div>
 
-        {/* Email */}
-        <div>
-          <label className="block mb-1 text-sm font-medium">Email</label>
-          <input
-            name="email"
-            value={user.email}
-            onChange={handleOnChange}
-            onBlur={handleValidation}
-            type="email"
-            placeholder="example@gmail.com"
-            className="bg-neutral-secondary-medium border border-default-medium text-sm rounded-base block w-full px-3 py-2"
-          />
-          {validation.email && renderAlert(validation.email)}
-        </div>
+          {/* Mật khẩu */}
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Mật khẩu
+            </label>
+            <input
+              name="matKhau"
+              value={user.matKhau}
+              onChange={handleOnChange}
+              onBlur={handleValidation}
+              type="password"
+              placeholder="••••••••"
+              className="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 px-3.5 py-2.5 transition-all shadow-inner"
+            />
+            {validation.matKhau && renderAlert(validation.matKhau)}
+          </div>
 
-        {/* Số điện thoại */}
-        <div>
-          <label className="block mb-1 text-sm font-medium">Số điện thoại</label>
-          <input
-            name="soDt"
-            value={user.soDt}
-            onChange={handleOnChange}
-            onBlur={handleValidation}
-            type="text"
-            placeholder="Nhập số điện thoại"
-            className="bg-neutral-secondary-medium border border-default-medium text-sm rounded-base block w-full px-3 py-2"
-          />
-          {validation.soDt && renderAlert(validation.soDt)}
-        </div>
+          {/* Họ tên */}
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Họ tên
+            </label>
+            <input
+              name="hoTen"
+              value={user.hoTen}
+              onChange={handleOnChange}
+              onBlur={handleValidation}
+              type="text"
+              placeholder="Nhập họ và tên"
+              className="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 px-3.5 py-2.5 transition-all shadow-inner"
+            />
+            {validation.hoTen && renderAlert(validation.hoTen)}
+          </div>
 
-        {/* Nút hành động */}
-        <div className="pt-2">
-          <button
-            disabled={!isFormValid || loading}
-            type="submit"
-            className="w-full disabled:bg-gray-300 disabled:cursor-not-allowed text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-base text-sm px-4 py-2.5 transition-colors"
-          >
-            {loading ? "Đang xử lý..." : "Đăng Ký"}
-          </button>
-        </div>
+          {/* Email */}
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Email
+            </label>
+            <input
+              name="email"
+              value={user.email}
+              onChange={handleOnChange}
+              onBlur={handleValidation}
+              type="email"
+              placeholder="example@gmail.com"
+              className="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 px-3.5 py-2.5 transition-all shadow-inner"
+            />
+            {validation.email && renderAlert(validation.email)}
+          </div>
 
-        <div className="text-center pt-2">
-          <span className="text-sm text-gray-600">Đã có tài khoản? </span>
-          <Link to="/login" className="text-sm text-blue-600 font-semibold hover:underline">
+          {/* Số điện thoại */}
+          <div>
+            <label className="block mb-1.5 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Số điện thoại
+            </label>
+            <input
+              name="soDt"
+              value={user.soDt}
+              onChange={handleOnChange}
+              onBlur={handleValidation}
+              type="text"
+              placeholder="Nhập số điện thoại"
+              className="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 px-3.5 py-2.5 transition-all shadow-inner"
+            />
+            {validation.soDt && renderAlert(validation.soDt)}
+          </div>
+
+          {/* Nút Đăng ký */}
+          <div className="pt-2">
+            <button
+              disabled={!isFormValid || loading}
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-sm rounded-xl py-3 shadow-lg shadow-indigo-600/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+            >
+              {loading ? (
+                <>
+                  <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Đang xử lý...</span>
+                </>
+              ) : (
+                <span>Đăng Ký Tài Khoản</span>
+              )}
+            </button>
+          </div>
+        </form>
+
+        {/* Chuyển sang Đăng Nhập */}
+        <div className="pt-4 border-t border-slate-800/80 text-center">
+          <span className="text-xs text-slate-400">Đã có tài khoản? </span>
+          <Link to="/login" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-4">
             Đăng nhập ngay
           </Link>
         </div>
-      </form>
+
+      </div>
     </div>
   );
 }
